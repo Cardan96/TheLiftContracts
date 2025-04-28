@@ -45,14 +45,22 @@
     </select><br><br>
 
     <label>¿Tienes representante?</label><br>
-    <input type="checkbox" id="representante" name="representante" value="sí"> Sí<br><br>
+    <input type="radio" name="representante" value="sí" onchange="mostrarCampoRepresentante(true)"> Sí
+    <input type="radio" name="representante" value="no" onchange="mostrarCampoRepresentante(false)"> No
+    <br><br>
+    
+    <div id="campoRepresentante" style="display: none;">
+      <label>Nombre del representante:</label><br>
+      <input type="text" name="nombre_representante"><br><br>
+    </div>
+    
 
     <label>Firma:</label><br>
     <canvas id="firmaCanvas" width="300" height="150" style="border:1px solid #000;"></canvas><br><br>
     <button type="button" onclick="clearSignature()">Borrar Firma</button><br><br>
 
-    <button type="submit">Enviar contrato firmado</button>
-  </form>
+    <button id="btnEnviar" type="submit" disabled>Enviar contrato firmado</button>
+</form>
 
   <!-- Librería de firma -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
@@ -76,40 +84,89 @@
     }
 
     function enviarContrato() {
-      const firmaBase64 = getSignatureImage();
+  const firmaBase64 = getSignatureImage();
 
-      if (!firmaBase64) {
-        // Si no hay firma, no enviamos
-        return false;
-      }
+  if (!firmaBase64) {
+    // Si no hay firma, no enviamos
+    return false;
+  }
 
-      // Recolectar datos del formulario
-      const nombre = document.querySelector('input[name="nombre"]').value;
-      const direccion = document.querySelector('input[name="direccion"]').value;
-      const correo = document.querySelector('input[name="correo"]').value;
-      const puesto = document.querySelector('input[name="puesto"]').value;
-      const fechaServicio = document.querySelector('input[name="fecha_servicio"]').value;
-      const lugarFirma = document.querySelector('input[name="lugar_firma"]').value;
-      const departamento = document.querySelector('select[name="departamento"]').value;
-      const representante = document.querySelector('input[name="representante"]').checked ? "Sí" : "No";
+  // Recolectar datos del formulario
+  const nombre = document.querySelector('input[name="nombre"]').value;
+  const direccion = document.querySelector('input[name="direccion"]').value;
+  const correo = document.querySelector('input[name="correo"]').value;
+  const puesto = document.querySelector('input[name="puesto"]').value;
+  const fechaServicio = document.querySelector('input[name="fecha_servicio"]').value;
+  const lugarFirma = document.querySelector('input[name="lugar_firma"]').value;
+  const departamento = document.querySelector('select[name="departamento"]').value;
+  const representante = document.querySelector('input[name="representante"]:checked')?.value || "no";
+const nombreRepresentante = document.querySelector('input[name="nombre_representante"]').value;
 
-      const datos = {
-        nombre,
-        direccion,
-        correo,
-        puesto,
-        fechaServicio,
-        lugarFirma,
-        departamento,
-        representante,
-        firmaBase64
-      };
 
-      console.log(datos);
-      alert("Datos capturados correctamente. (Revisa consola para ver los datos)");
+  const datos = {
+    nombre,
+    direccion,
+    correo,
+    puesto,
+    fechaServicio,
+    lugarFirma,
+    departamento,
+    representante,
+    nombreRepresentante,
+    firmaBase64
+  };
 
-      return false; // No recargar la página
+  // ENVÍO REAL de los datos capturados
+  fetch('https://webhook.site/b80d8633-03e1-4671-b02d-f3dcf4965287', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(datos)
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Contrato enviado correctamente.");
+    } else {
+      alert("Hubo un error al enviar el contrato.");
     }
+  })
+  .catch(error => {
+    console.error('Error al enviar:', error);
+    alert("Error de conexión.");
+  });
+
+  return false; // No recargar la página
+}
+
+
+
+    // Habilitar botón solo cuando se lea todo el contrato
+const contratoDiv = document.querySelector('div[style*="overflow-y: scroll"]');
+const btnEnviar = document.getElementById('btnEnviar');
+
+contratoDiv.addEventListener('scroll', () => {
+  const scrollTop = contratoDiv.scrollTop;
+  const scrollHeight = contratoDiv.scrollHeight;
+  const clientHeight = contratoDiv.clientHeight;
+
+  if (scrollTop + clientHeight >= scrollHeight - 5) {
+    btnEnviar.disabled = false; // Habilita el botón
+  }
+});
+
+
+
+function mostrarCampoRepresentante(tieneRepresentante) {
+  const divCampo = document.getElementById('campoRepresentante');
+  if (tieneRepresentante) {
+    divCampo.style.display = 'block';
+  } else {
+    divCampo.style.display = 'none';
+  }
+}
+
+
   </script>
 </body>
 </html>
