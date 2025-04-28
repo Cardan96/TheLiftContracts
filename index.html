@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Firma de Contrato - The Lift</title>
+</head>
+<body style="font-family: sans-serif; margin: 20px;">
+  <h1>Contrato de Servicios</h1>
+
+  <div style="height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+    <p>Contrato de prestación de servicios profesionales...</p>
+    <p>[Aquí iría todo el texto largo del contrato.]</p>
+    <p>Última página del contrato...</p>
+  </div>
+
+  <h2>Firma y Datos</h2>
+
+  <form action="#" method="post">
+    <label>Nombre completo:</label><br>
+    <input type="text" name="nombre" required><br><br>
+
+    <label>Dirección:</label><br>
+    <input type="text" name="direccion" required><br><br>
+
+    <label>Correo electrónico:</label><br>
+    <input type="email" name="correo" required><br><br>
+
+    <label>Puesto:</label><br>
+    <input type="text" name="puesto" required><br><br>
+
+    <label>Fecha de servicio:</label><br>
+    <input type="date" name="fecha_servicio" required><br><br>
+
+    <label>Lugar de firma:</label><br>
+    <input type="text" name="lugar_firma"><br><br>
+
+    <label>Departamento:</label><br>
+    <select name="departamento" required>
+      <option value="">Selecciona una opción</option>
+      <option value="Cámara">Cámara</option>
+      <option value="Producción">Producción</option>
+      <option value="Arte">Arte</option>
+      <option value="Otro">Otro</option>
+    </select><br><br>
+
+    <label>¿Tienes representante?</label><br>
+    <input type="checkbox" id="representante" name="representante" value="sí"> Sí<br><br>
+
+    <label>Firma:</label><br>
+    <textarea name="firma" rows="4" cols="40" placeholder="Aquí irá un pad de firma después"></textarea><br><br>
+
+    <button type="submit">Enviar contrato firmado</button>
+  </form>
+
+</body>
+</html>
