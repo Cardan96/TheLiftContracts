@@ -6,13 +6,14 @@
   <title>Firma de Contrato - The Lift</title>
 </head>
 <body style="font-family: sans-serif; margin: 20px;">
-  <h1>Contrato de Servicios</h1>
+    <h1>Contrato de Servicios</h1>
 
-  <div style="height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
-    <p>Contrato de prestación de servicios profesionales...</p>
-    <p>[Aquí iría todo el texto largo del contrato.]</p>
-    <p>Última página del contrato...</p>
-  </div>
+    <div id="contratoTexto" style="height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+      <p>Contrato de prestación de servicios profesionales...</p>
+      <p>[Aquí iría todo el texto largo del contrato.]</p>
+      <p>Última página del contrato...</p>
+    </div>
+    
 
   <h2>Firma y Datos</h2>
 
@@ -141,8 +142,8 @@ const nombreRepresentante = document.querySelector('input[name="nombre_represent
 
 
 
-    // Habilitar botón solo cuando se lea todo el contrato
-const contratoDiv = document.querySelector('div[style*="overflow-y: scroll"]');
+// Habilitar botón solo cuando se lea todo el contrato
+const contratoDiv = document.getElementById('contratoTexto');
 const btnEnviar = document.getElementById('btnEnviar');
 
 contratoDiv.addEventListener('scroll', () => {
@@ -154,6 +155,8 @@ contratoDiv.addEventListener('scroll', () => {
     btnEnviar.disabled = false; // Habilita el botón
   }
 });
+
+
 
 
 
