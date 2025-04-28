@@ -16,7 +16,7 @@
 
   <h2>Firma y Datos</h2>
 
-  <form action="#" method="post">
+  <form onsubmit="return enviarContrato()">
     <label>Nombre completo:</label><br>
     <input type="text" name="nombre" required><br><br>
 
@@ -48,10 +48,68 @@
     <input type="checkbox" id="representante" name="representante" value="sí"> Sí<br><br>
 
     <label>Firma:</label><br>
-    <textarea name="firma" rows="4" cols="40" placeholder="Aquí irá un pad de firma después"></textarea><br><br>
+    <canvas id="firmaCanvas" width="300" height="150" style="border:1px solid #000;"></canvas><br><br>
+    <button type="button" onclick="clearSignature()">Borrar Firma</button><br><br>
 
     <button type="submit">Enviar contrato firmado</button>
   </form>
 
+  <!-- Librería de firma -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+
+  <script>
+    // Inicializar Signature Pad
+    const canvas = document.getElementById('firmaCanvas');
+    const signaturePad = new SignaturePad(canvas);
+
+    function clearSignature() {
+      signaturePad.clear();
+    }
+
+    function getSignatureImage() {
+      if (signaturePad.isEmpty()) {
+        alert("Por favor firma antes de enviar.");
+        return null;
+      } else {
+        return signaturePad.toDataURL();
+      }
+    }
+
+    function enviarContrato() {
+      const firmaBase64 = getSignatureImage();
+
+      if (!firmaBase64) {
+        // Si no hay firma, no enviamos
+        return false;
+      }
+
+      // Recolectar datos del formulario
+      const nombre = document.querySelector('input[name="nombre"]').value;
+      const direccion = document.querySelector('input[name="direccion"]').value;
+      const correo = document.querySelector('input[name="correo"]').value;
+      const puesto = document.querySelector('input[name="puesto"]').value;
+      const fechaServicio = document.querySelector('input[name="fecha_servicio"]').value;
+      const lugarFirma = document.querySelector('input[name="lugar_firma"]').value;
+      const departamento = document.querySelector('select[name="departamento"]').value;
+      const representante = document.querySelector('input[name="representante"]').checked ? "Sí" : "No";
+
+      const datos = {
+        nombre,
+        direccion,
+        correo,
+        puesto,
+        fechaServicio,
+        lugarFirma,
+        departamento,
+        representante,
+        firmaBase64
+      };
+
+      console.log(datos);
+      alert("Datos capturados correctamente. (Revisa consola para ver los datos)");
+
+      return false; // No recargar la página
+    }
+  </script>
 </body>
 </html>
